@@ -1,0 +1,131 @@
+{
+	"info": {
+		"_postman_id": "6237ed6a-6113-420d-8987-227e6792c5c6",
+		"name": "Win",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13795035"
+	},
+	"item": [
+		{
+			"name": "Components",
+			"item": [
+				{
+					"name": "Hardware",
+					"item": [
+						{
+							"name": "Busca por Id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/components/hardware/2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"components",
+										"hardware",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar todos",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/components/hardware",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"components",
+										"hardware"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/components/hardware/1",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"components",
+										"hardware",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Insert",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"supplierCode\": \"ROL20020\",\r\n    \"description\": \"Roldana dupla 60kg - advance\",\r\n    \"componentType\": {\r\n        \"id\": 3\r\n    },\r\n    \"componentGroup\": {\r\n        \"id\": 7\r\n    },\r\n    \"componentSubgroup\": {\r\n        \"id\": 1\r\n    },\r\n    \"suppliers\": [\r\n        {\r\n            \"id\": 1\r\n        }\r\n    ],\r\n    \"finish\": {\r\n        \"id\": 8\r\n    },\r\n    \"unit\": \"UNIDADE\",\r\n    \"price\": 15,\r\n    \"weight\": 0.1,\r\n    \"minimumOrder\": 1.0,\r\n    \"hardwareChannel\": 12,\r\n    \"width\": 12,\r\n    \"height\": 20,\r\n    \"length\": 90\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/components/hardware",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"components",
+										"hardware"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{   \r\n    \"supplierCode\": \"ROL222\",\r\n    \"suppliers\":[\r\n        {\r\n            \"id\": 2\r\n        },\r\n        {\r\n            \"id\": 3\r\n        }\r\n    ],\r\n    \"price\": 0.51\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/components/hardware/2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"components",
+										"hardware",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

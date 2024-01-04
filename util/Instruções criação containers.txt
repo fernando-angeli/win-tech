@@ -1,0 +1,46 @@
+Instruções criação containers
+
+	1º Passo - criar rede interna:
+docker network create [nome-rede]
+
+---- OBSERVAÇÕES ----
+8888:8888 (porta interna e externa)
+--network wt-net (rede interna)
+
+--------
+
+> CONFIG SERVER
+	1 - Comando no terminal (gera o .jar do projeto)
+mvnw clean package
+
+	2 - Incluir Dockerfile -  Modelo para java 11:
+FROM openjdk:11
+VOLUME /tmp
+EXPOSE 8888
+ADD ./target/wt-config-server-0.0.1-SNAPSHOT.jar wt-config-server.jar
+ENTRYPOINT ["java","-jar","/wt-config-server.jar"]
+
+	3 - Criação imagem docker:
+docker build -t wt-config-server:v1 .
+
+	4 - Instanciação de container docker:
+docker run -p 8888:8888 --name wt-config-server --network wt-net -e BITBUCKET_USER=? -e BITBUCKET_PASS=? wt-config-server:v1
+
+--------
+
+> EUREKA SERVER
+	1 - Comando no terminal (gera o .jar do projeto)
+mvnw clean package
+
+	2 - Incluir Dockerfile - Modelo para java 21:
+FROM openjdk:21
+VOLUME /tmp
+EXPOSE 8761
+ADD ./target/wt-eureka-server-0.0.1-SNAPSHOT.jar wt-eureka-server.jar
+ENTRYPOINT ["java","-jar","/wt-eureka-server.jar"]
+
+	3 - Criação imagem docker:
+docker build -t wt-eureka-server:v1 .
+
+	4 - Instanciação de container docker:
+docker run -p 8761:8761 --name wt-eureka-server --network wt-net wt-eureka-server:v1
