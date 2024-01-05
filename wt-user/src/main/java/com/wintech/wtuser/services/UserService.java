@@ -1,6 +1,5 @@
 package com.wintech.wtuser.services;
 
-import com.netflix.discovery.converters.Auto;
 import com.wintech.wtuser.domains.Role;
 import com.wintech.wtuser.domains.User;
 import com.wintech.wtuser.dtos.RoleDto;
