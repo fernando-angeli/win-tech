@@ -1,7 +1,8 @@
 package com.wintech.wtuser.dtos;
 
-import com.wintech.wtuser.controllers.UserController;
 import lombok.*;
+
+import java.util.List;
 
 @Data
 public class UserDto {
@@ -9,6 +10,6 @@ public class UserDto {
     private Long id;
     private String name;
     private String email;
-    private String password;
+    private List<RoleDto> roles;
 
 }

@@ -3,14 +3,14 @@ package com.wintech.wtuser.controllers;
 import com.wintech.wtuser.dtos.UserDto;
 import com.wintech.wtuser.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/usuarios")
@@ -28,6 +28,18 @@ public class UserController {
                 .buildAndExpand(userDto.getId())
                 .toUri();
         return ResponseEntity.created(uri).body(userDto);
+    }
+
+    @GetMapping(value = {"/{id}"})
+    public ResponseEntity<Optional<UserDto>> findById(@PathVariable Long id){
+        Optional<UserDto> userDto = service.findById(id);
+        return ResponseEntity.ok().body(userDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<UserDto>> findAll(Pageable pageable){
+        Page users = service.findAll(pageable);
+        return ResponseEntity.ok().body(users);
     }
 
 }
