@@ -1,6 +1,7 @@
 package com.wintech.wtuser.controllers;
 
 import com.wintech.wtuser.dtos.UserDto;
+import com.wintech.wtuser.dtos.UserInsertDto;
 import com.wintech.wtuser.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,12 +21,12 @@ public class UserController {
     private UserService service;
 
     @PostMapping
-    public ResponseEntity<UserDto> insert (@RequestBody UserDto userDto){
-        userDto = service.insert(userDto);
+    public ResponseEntity<UserDto> insert (@RequestBody UserInsertDto userInsertDto){
+        UserDto userDto = service.insert(userInsertDto);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(userDto.getId())
+                .buildAndExpand(userInsertDto.getId())
                 .toUri();
         return ResponseEntity.created(uri).body(userDto);
     }

@@ -4,6 +4,7 @@ import com.wintech.wtuser.domains.Role;
 import com.wintech.wtuser.domains.User;
 import com.wintech.wtuser.dtos.RoleDto;
 import com.wintech.wtuser.dtos.UserDto;
+import com.wintech.wtuser.dtos.UserInsertDto;
 import com.wintech.wtuser.repositories.RoleRepository;
 import com.wintech.wtuser.repositories.UserRepository;
 import com.wintech.wtuser.services.exceptions.ResourceNotFoundException;
@@ -11,9 +12,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,9 +29,16 @@ public class UserService {
     @Autowired
     private ModelMapper mapper;
 
-    public UserDto insert(UserDto userDto){
-        User user = convertDtoToEntity(userDto);
-        for(RoleDto roleDto : userDto.getRoles()){
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    public UserService() {
+    }
+
+    public UserDto insert(UserInsertDto userInsertDto){
+        User user = convertDtoToEntity(userInsertDto);
+        user.setPassword(passwordEncoder.encode(userInsertDto.getPassword()));
+        for(RoleDto roleDto : userInsertDto.getRoles()){
             user.getRoles().add(roleRepository.getReferenceById(roleDto.getId()));
         }
         repository.save(user);
@@ -64,8 +72,8 @@ public class UserService {
     }
 
     private RoleDto convertEntityToDto(Role role){
-        RoleDto roleDto = mapper.map(role, RoleDto.class);
-        return roleDto;
+        RoleDto roleSimpleDto = mapper.map(role, RoleDto.class);
+        return roleSimpleDto;
     }
 
     private void verifyExistsId(Long id){
