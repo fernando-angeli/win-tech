@@ -10,7 +10,6 @@ import com.wintech.wtuser.repositories.RoleRepository;
 import com.wintech.wtuser.repositories.UserRepository;
 import com.wintech.wtuser.services.exceptions.DatabaseException;
 import com.wintech.wtuser.services.exceptions.ResourceNotFoundException;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -22,6 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.wintech.wtuser.mapper.EntityMapper.convertToDto;
+import static com.wintech.wtuser.mapper.EntityMapper.convertToEntity;
+
 @Service
 public class UserService {
 
@@ -32,42 +34,40 @@ public class UserService {
     private RoleRepository roleRepository;
 
     @Autowired
-    private ModelMapper mapper;
-
-    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-
     @Transactional
     public UserDto insert(UserInsertDto userInsertDto){
-        User user = convertUserInsertDtoToUser(userInsertDto);
+        User user = convertToEntity(userInsertDto, User.class);
+        setRolesToUser(userInsertDto, user);
         user.setPassword(passwordEncoder.encode(userInsertDto.getPassword()));
-        setRolesToUser(user, userInsertDto);
         repository.save(user);
-        return convertUserToUserDto(user);
+        return convertToDto(user, UserDto.class);
     }
 
     @Transactional(readOnly = true)
     public Optional<UserDto> findById(Long id) {
         Optional<User> user = repository.findById(id);
-        UserDto userDto = mapper.map(user.orElseThrow(() -> new ResourceNotFoundException("Id ["+id+"] não localizado.")), UserDto.class);
+        UserDto userDto = convertToDto(user.orElseThrow(() -> new ResourceNotFoundException("Id ["+id+"] não localizado.")), UserDto.class);
         return Optional.of(userDto);
     }
 
     @Transactional(readOnly = true)
     public Page<UserDto> findAll(Pageable pageable) {
         Page<User> users = repository.findAll(pageable);
-        return users.map(this::convertUserToUserDto);
+        return users.map(user -> convertToDto(user, UserDto.class));
     }
 
     @Transactional
-    public UserDto update(Long id, UserUpdateDto userDto) {
+    public UserDto update(Long id, UserUpdateDto dto) {
         verifyExistsId(id);
         User user = repository.getReferenceById(id);
-        convertUserDtoToUser(userDto, user);
+        convertToEntity(dto, user);
+        setRolesToUser(dto, user);
         user = repository.save(user);
-        return convertUserToUserDto(user);
+        return convertToDto(user, UserDto.class);
     }
 
+    @Transactional
     public void delete(Long id) {
         try{
             repository.deleteById(id);
@@ -78,44 +78,11 @@ public class UserService {
         }
     }
 
-    private User convertUserInsertDtoToUser(UserInsertDto userInsertDto){
-        User user = new User();
-        user = mapper.map(userInsertDto, User.class);
+    private void setRolesToUser(UserDto dto, User user){
         user.getRoles().clear();
-        setRolesToUser(user, userInsertDto);
-        return user;
-    }
-
-    private void convertUserDtoToUser(UserDto userDto, User user){
-        mapper.map(user, userDto);
-        user.getRoles().clear();
-        setRolesToUser(user, userDto);
-    }
-
-    private UserDto convertUserToUserDto(User user) {
-        UserDto userDto = mapper.map(user, UserDto.class);
-        userDto.getRoles().clear();
-        setRolesToUserDto(userDto, user);
-        return userDto;
-    }
-
-    private RoleDto convertRoleToRoleDto(Role role){
-        return mapper.map(role, RoleDto.class);
-    }
-
-    private void setRolesToUser(User user, UserDto userDto){
-        user.getRoles().clear();
-        for(RoleDto roleDto : userDto.getRoles()){
+        for(RoleDto roleDto : dto.getRoles()){
             Role role = roleRepository.getReferenceById(roleDto.getId());
             user.getRoles().add(role);
-        }
-    }
-
-    private void setRolesToUserDto(UserDto userDto, User user) {
-        userDto.getRoles().clear();
-        for(Role r : user.getRoles()){
-            Role role = roleRepository.getReferenceById(r.getId());
-            userDto.getRoles().add(convertRoleToRoleDto(role));
         }
     }
 

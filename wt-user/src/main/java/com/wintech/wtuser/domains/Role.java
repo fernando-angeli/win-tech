@@ -8,13 +8,14 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@Table(name = "tb_role")
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tb_role")
 public class Role{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private Long id;
     private String roleName;
 
@@ -23,11 +24,11 @@ public class Role{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Role role = (Role) o;
-        return Objects.equals(id, role.id) && Objects.equals(roleName, role.roleName);
+        return Objects.equals(id, role.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, roleName);
+        return Objects.hash(id);
     }
 }
