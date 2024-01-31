@@ -1,0 +1,6 @@
+SUBIR SERVIÇO DE USUARIOS PARA CONTAINER
+1) Criar bando de dados para usuários
+2) Criar imagem
+3) Criar instancia do container
+
+> Ajustar servidor eureka server para acessar o serviço wt-eureka-server (application.properties)

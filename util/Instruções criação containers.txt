@@ -13,8 +13,8 @@ docker network create [nome-rede]
 	1 - Comando no terminal (gera o .jar do projeto)
 mvnw clean package
 
-	2 - Incluir Dockerfile -  Modelo para java 11:
-FROM openjdk:11
+	2 - Incluir Dockerfile -  Modelo para java 21:
+FROM openjdk:21
 VOLUME /tmp
 EXPOSE 8888
 ADD ./target/wt-config-server-0.0.1-SNAPSHOT.jar wt-config-server.jar
@@ -44,3 +44,23 @@ docker build -t wt-eureka-server:v1 .
 
 	4 - Instanciação de container docker:
 docker run -p 8761:8761 --name wt-eureka-server --network wt-net wt-eureka-server:v1
+
+
+--------
+
+> API GATEWAY
+	1 - Comando no terminal (gera o .jar do projeto)
+mvnw clean package -DskipTests
+
+	2 - Incluir Dockerfile -  Modelo para java 21:
+FROM openjdk:21
+VOLUME /tmp
+EXPOSE 8765
+ADD ./target/wt-api-gateway-0.0.1-SNAPSHOT.jar wt-api-gateway.jar
+ENTRYPOINT ["java","-jar","/wt-api-gateway.jar"]
+
+	3 - Criação imagem docker:
+docker build -t wt-api-gateway:v1 .
+
+	4 - Instanciação de container docker:
+docker run -p 8765:8765 --name wt-api-gateway --network wt-net wt-api-gateway:v1

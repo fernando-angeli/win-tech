@@ -35,6 +35,7 @@ public class UserService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
     @Transactional
     public UserDto insert(UserInsertDto userInsertDto){
         User user = convertToEntity(userInsertDto, User.class);
@@ -48,6 +49,12 @@ public class UserService {
     public Optional<UserDto> findById(Long id) {
         Optional<User> user = repository.findById(id);
         UserDto userDto = convertToDto(user.orElseThrow(() -> new ResourceNotFoundException("Id ["+id+"] não localizado.")), UserDto.class);
+        return Optional.of(userDto);
+    }
+    @Transactional(readOnly = true)
+    public Optional<UserDto> findByUsername(String username) {
+        Optional<User> user = repository.findByEmailOrLogin(username, username);
+        UserDto userDto = convertToDto(user.orElseThrow(() -> new ResourceNotFoundException("User " + username + " não localizado.")), UserDto.class);
         return Optional.of(userDto);
     }
 

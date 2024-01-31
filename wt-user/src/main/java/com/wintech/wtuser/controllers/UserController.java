@@ -16,7 +16,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/usuarios")
+@RequestMapping(value = "/users")
 public class UserController {
 
     @Autowired
@@ -43,6 +43,12 @@ public class UserController {
     public ResponseEntity<Page<UserDto>> findAll(Pageable pageable){
         Page users = service.findAll(pageable);
         return ResponseEntity.ok().body(users);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Optional<UserDto>> findByUsername(@RequestParam String username){
+        Optional<UserDto> userDto = service.findByUsername(username);
+        return ResponseEntity.ok(userDto);
     }
 
     @PutMapping("/{id}")
