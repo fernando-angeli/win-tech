@@ -1,5 +1,6 @@
 package com.wintech.wtpessoasservice.domains;
 
+import com.wintech.wtpessoasservice.domains.address.Address;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
