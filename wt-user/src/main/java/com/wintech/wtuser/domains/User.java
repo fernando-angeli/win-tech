@@ -2,16 +2,16 @@ package com.wintech.wtuser.domains;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.modelmapper.internal.bytebuddy.implementation.bind.MethodDelegationBinder;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "tb_user")
 public class User {
 
@@ -19,10 +19,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
     private Long id;
+
+    @Column(unique = true)
     private String login;
 
     @Column(unique = true)
     private String email;
+
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)

@@ -1,6 +1,6 @@
 package com.wintech.wtuser.dtos;
 
-import lombok.Data;
+import lombok.*;
 
 @Data
 public class RoleDto {

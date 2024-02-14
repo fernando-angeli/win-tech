@@ -6,8 +6,7 @@ import lombok.*;
 import java.util.Objects;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "tb_role")
 @AllArgsConstructor
 @NoArgsConstructor

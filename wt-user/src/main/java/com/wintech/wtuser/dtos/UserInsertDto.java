@@ -1,8 +1,9 @@
 package com.wintech.wtuser.dtos;
 
 import com.wintech.wtuser.services.validation.UserInsertValid;
-import lombok.Data;
+import lombok.*;
 
+@EqualsAndHashCode(callSuper = true)
 @UserInsertValid
 @Data
 public class
