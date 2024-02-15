@@ -64,3 +64,5 @@ docker build -t wt-api-gateway:v1 .
 
 	4 - Instanciação de container docker:
 docker run -p 8765:8765 --name wt-api-gateway --network wt-net wt-api-gateway:v1
+
+0287be6c9c9e a521600f69a2 7528807fe258 394fe9ee7d54 c52fa6146dea 66ba61b89a02
